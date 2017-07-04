@@ -2898,6 +2898,13 @@ struct wpa_driver_ops {
 	 */
 	int (*tdls_oper)(void *priv, enum tdls_oper oper, const u8 *peer);
 
+	int (*wl4_change_sleep_time)(
+			void *priv, const u32 sleep_time, const u8 *addr);
+
+	int (*wl4_change_quota)(void *priv, const u32 quota, const u8 *addr);
+
+	int (*wl4_resume_queues)(void *priv, const u8 *addr);
+
 	/**
 	 * wnm_oper - Notify driver of the WNM frame reception
 	 * @priv: Private driver interface data

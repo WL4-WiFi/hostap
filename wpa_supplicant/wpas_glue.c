@@ -708,6 +708,29 @@ static int wpa_supplicant_tdls_enable_channel_switch(
 						  params);
 }
 
+static int wpa_supplicant_wl4_change_sleep_time(void *ctx,
+		const u32 sleep_time, const u8 *addr)
+{
+	struct wpa_supplicant *wpa_s = ctx;
+
+	return wpa_drv_wl4_change_sleep_time(wpa_s, sleep_time, addr);
+}
+
+static int wpa_supplicant_wl4_change_quota(
+		void *ctx, const u32 quota, const u8 *addr)
+{
+	struct wpa_supplicant *wpa_s = ctx;
+
+	return wpa_drv_wl4_change_quota(wpa_s, quota, addr);
+}
+
+static int wpa_supplicant_wl4_resume_queues(
+		void *ctx, const u8 *addr)
+{
+	struct wpa_supplicant *wpa_s = ctx;
+
+	return wpa_drv_wl4_resume_queues(wpa_s, addr);
+}
 
 static int wpa_supplicant_tdls_disable_channel_switch(void *ctx, const u8 *addr)
 {
@@ -1079,6 +1102,10 @@ int wpa_supplicant_init_wpa(struct wpa_supplicant *wpa_s)
 	ctx->tdls_peer_addset = wpa_supplicant_tdls_peer_addset;
 	ctx->tdls_enable_channel_switch =
 		wpa_supplicant_tdls_enable_channel_switch;
+	ctx->wl4_change_sleep_time =
+		wpa_supplicant_wl4_change_sleep_time;
+	ctx->wl4_change_quota = wpa_supplicant_wl4_change_quota;
+	ctx->wl4_resume_queues = wpa_supplicant_wl4_resume_queues;
 	ctx->tdls_disable_channel_switch =
 		wpa_supplicant_tdls_disable_channel_switch;
 #endif /* CONFIG_TDLS */

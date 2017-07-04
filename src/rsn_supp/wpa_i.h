@@ -337,6 +337,31 @@ wpa_sm_tdls_enable_channel_switch(struct wpa_sm *sm, const u8 *addr,
 }
 
 static inline int
+wpa_sm_wl4_change_sleep_time(struct wpa_sm *sm,
+		const u32 sleep_time, const u8 *addr)
+{
+	if (sm->ctx->wl4_change_sleep_time)
+		return sm->ctx->wl4_change_sleep_time(sm->ctx->ctx, sleep_time, addr);
+	return -1;
+}
+
+static inline int
+wpa_sm_wl4_change_quota(struct wpa_sm *sm, const u32 quota, const u8 *addr)
+{
+	if (sm->ctx->wl4_change_quota)
+		return sm->ctx->wl4_change_quota(sm->ctx->ctx, quota, addr);
+	return -1;
+}
+
+static inline int
+wpa_sm_wl4_resume_queues(struct wpa_sm *sm, const u8 *addr)
+{
+	if (sm->ctx->wl4_resume_queues)
+		return sm->ctx->wl4_resume_queues(sm->ctx->ctx, addr);
+	return -1;
+}
+
+static inline int
 wpa_sm_tdls_disable_channel_switch(struct wpa_sm *sm, const u8 *addr)
 {
 	if (sm->ctx->tdls_disable_channel_switch)

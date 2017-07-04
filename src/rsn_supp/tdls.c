@@ -3021,3 +3021,31 @@ int wpa_tdls_disable_chan_switch(struct wpa_sm *sm, const u8 *addr)
 	peer->chan_switch_enabled = 0;
 	return 0;
 }
+
+int wpa_wl4_change_sleep_time(struct wpa_sm *sm,
+		const u32 sleep_time, const u8 *addr)
+{
+	if (sm->tdls_disabled || !sm->tdls_supported)
+		return -1;
+	wpa_sm_wl4_change_sleep_time(sm, sleep_time, addr);
+	return 0;
+}
+
+int wpa_wl4_change_quota(struct wpa_sm *sm, const u32 quota, const u8 *addr)
+{
+	if (sm->tdls_disabled || !sm->tdls_supported)
+		return -1;
+
+	wpa_sm_wl4_change_quota(sm, quota, addr);
+	return 0;
+}
+
+int wpa_wl4_resume_queues(struct wpa_sm *sm,
+		const u8 *addr)
+{
+	if (sm->tdls_disabled || !sm->tdls_supported)
+		return -1;
+
+	wpa_sm_wl4_resume_queues(sm, addr);
+	return 0;
+}

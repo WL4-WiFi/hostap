@@ -2558,6 +2558,23 @@ static int wpa_cli_cmd_tdls_link_status(struct wpa_ctrl *ctrl, int argc,
 	return wpa_cli_cmd(ctrl, "TDLS_LINK_STATUS", 1, argc, argv);
 }
 
+static int wpa_cli_cmd_wl4_change_sleep_time(struct wpa_ctrl *ctrl, int argc,
+					char *argv[])
+{
+	return wpa_cli_cmd(ctrl, "WL4_SLEEP_TIME", 1, argc, argv);
+}
+
+static int wpa_cli_cmd_wl4_change_quota(struct wpa_ctrl *ctrl, int argc,
+					char *argv[])
+{
+	return wpa_cli_cmd(ctrl, "WL4_QUOTA", 1, argc, argv);
+}
+
+static int wpa_cli_cmd_wl4_resume_queues(struct wpa_ctrl *ctrl, int argc,
+					char *argv[])
+{
+	return wpa_cli_cmd(ctrl, "WL4_RESUME_QUEUES", 1, argc, argv);
+}
 
 static int wpa_cli_cmd_wmm_ac_addts(struct wpa_ctrl *ctrl, int argc,
 				    char *argv[])
@@ -3246,6 +3263,15 @@ static const struct wpa_cli_cmd wpa_cli_commands[] = {
 	{ "tdls_link_status", wpa_cli_cmd_tdls_link_status, NULL,
 	  cli_cmd_flag_none,
 	  "<addr> = TDLS link status with <addr>" },
+	{ "wl4_change_sleep_time", wpa_cli_cmd_wl4_change_sleep_time, NULL,
+		cli_cmd_flag_none,
+		"<addr> time = WL4 peer <addr> and sleep time for <addr>"},
+	{ "wl4_change_quota", wpa_cli_cmd_wl4_change_quota, NULL,
+		cli_cmd_flag_none,
+		"<addr> quota = WL4 peer <addr> and quota for <addr>"},
+	{ "wl4_resume_queues", wpa_cli_cmd_wl4_resume_queues, NULL,
+		cli_cmd_flag_none,
+		"<addr> = WL4 addr"},
 	{ "wmm_ac_addts", wpa_cli_cmd_wmm_ac_addts, NULL,
 	  cli_cmd_flag_none,
 	  "<uplink/downlink/bidi> <tsid=0..7> <up=0..7> [nominal_msdu_size=#] "

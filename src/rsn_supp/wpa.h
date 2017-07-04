@@ -71,6 +71,10 @@ struct wpa_sm_ctx {
 	int (*tdls_enable_channel_switch)(
 		void *ctx, const u8 *addr, u8 oper_class,
 		const struct hostapd_freq_params *params);
+	int (*wl4_change_sleep_time)(
+			void *ctx, const u32 sleep_time,  const u8 *addr);
+	int (*wl4_change_quota)(void *ctx, const u32 quota, const u8 *addr);
+	int (*wl4_resume_queues)(void *ctx, const u8 *addr);
 	int (*tdls_disable_channel_switch)(void *ctx, const u8 *addr);
 #endif /* CONFIG_TDLS */
 	void (*set_rekey_offload)(void *ctx, const u8 *kek, size_t kek_len,
@@ -418,6 +422,11 @@ int wpa_tdls_enable_chan_switch(struct wpa_sm *sm, const u8 *addr,
 				u8 oper_class,
 				struct hostapd_freq_params *freq_params);
 int wpa_tdls_disable_chan_switch(struct wpa_sm *sm, const u8 *addr);
+int wpa_wl4_change_quota(struct wpa_sm *sm, const u32 quota, const u8 *addr);
+int wpa_wl4_change_sleep_time(struct wpa_sm *sm,
+		const u32 sleep_time, const u8 *addr);
+int wpa_wl4_resume_queues(struct wpa_sm *sm, const u8 *addr);
+
 #ifdef CONFIG_TDLS_TESTING
 extern unsigned int tdls_testing;
 #endif /* CONFIG_TDLS_TESTING */

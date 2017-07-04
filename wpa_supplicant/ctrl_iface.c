@@ -864,6 +864,55 @@ static int wpa_supplicant_ctrl_iface_tdls_link_status(
 	return ret;
 }
 
+static int wpa_supplicant_ctrl_iface_wl4_sleep_time(
+		struct wpa_supplicant *wpa_s, char *buf)
+{
+	u32 sleep_time;
+	u8 addr[ETH_ALEN];
+	char *pos;
+
+	if (hwaddr_aton(buf, addr))
+		return -1;
+
+	pos = buf + 17;
+	if (*pos != ' ')
+		return -1;
+	pos++;
+
+	sleep_time = atoi(pos);
+
+	return wpa_wl4_change_sleep_time(wpa_s->wpa, sleep_time, addr);
+}
+
+static int wpa_supplicant_ctrl_iface_wl4_quota(
+		struct wpa_supplicant *wpa_s, char *buf)
+{
+	u32 quota;
+	u8 addr[ETH_ALEN];
+	char *pos;
+
+	if (hwaddr_aton(buf, addr))
+		return -1;
+
+	pos = buf + 17;
+	if (*pos != ' ')
+		return -1;
+	pos++;
+
+	quota = atoi(pos);
+	return wpa_wl4_change_quota(wpa_s->wpa, quota, addr);
+}
+
+static int wpa_supplicant_ctrl_iface_wl4_resume_queues(
+		struct wpa_supplicant *wpa_s, char *buf)
+{
+	u8 addr[ETH_ALEN];
+
+	if (hwaddr_aton(buf, addr))
+		return -1;
+
+	return wpa_wl4_resume_queues(wpa_s->wpa, addr);
+}
 #endif /* CONFIG_TDLS */
 
 
@@ -9238,6 +9287,15 @@ char * wpa_supplicant_ctrl_iface_process(struct wpa_supplicant *wpa_s,
 	} else if (os_strncmp(buf, "TDLS_CANCEL_CHAN_SWITCH ", 24) == 0) {
 		if (wpa_supplicant_ctrl_iface_tdls_cancel_chan_switch(wpa_s,
 								      buf + 24))
+			reply_len = -1;
+	} else if (os_strncmp(buf, "WL4_SLEEP_TIME ", 15) == 0) {
+		if (wpa_supplicant_ctrl_iface_wl4_sleep_time(wpa_s, buf + 15))
+			reply_len = -1;
+	} else if (os_strncmp(buf, "WL4_QUOTA ", 10) == 0) {
+		if (wpa_supplicant_ctrl_iface_wl4_quota(wpa_s, buf + 10))
+			reply_len = -1;
+	} else if (os_strncmp(buf, "WL4_RESUME_QUEUES ", 18) == 0) {
+		if (wpa_supplicant_ctrl_iface_wl4_resume_queues(wpa_s, buf + 18))
 			reply_len = -1;
 	} else if (os_strncmp(buf, "TDLS_LINK_STATUS ", 17) == 0) {
 		reply_len = wpa_supplicant_ctrl_iface_tdls_link_status(

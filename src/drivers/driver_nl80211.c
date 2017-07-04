@@ -7583,6 +7583,53 @@ static int nl80211_tdls_oper(void *priv, enum tdls_oper oper, const u8 *peer)
 	return send_and_recv_msgs(drv, msg, NULL, NULL);
 }
 
+static int nl80211_wl4_change_sleep_time(
+		void *priv, u32 sleep_time, const u8 *addr)
+{
+	struct i802_bss *bss = priv;
+	struct wpa_driver_nl80211_data *drv = bss->drv;
+	struct nl_msg *msg;
+
+	if (!(msg = nl80211_drv_msg(drv, 0, NL80211_CMD_WL4)) ||
+			nla_put_u32(msg, NL80211_WL4_ATTR_SLEEP, sleep_time) ||
+			nla_put(msg, NL80211_ATTR_MAC, ETH_ALEN, addr)) {
+		nlmsg_free(msg);
+		return -ENOBUFS;
+	}
+
+	return send_and_recv_msgs(drv, msg, NULL, NULL);
+}
+
+static int nl80211_wl4_change_quota(void *priv, u32 quota, const u8 *addr)
+{
+	struct i802_bss *bss = priv;
+	struct wpa_driver_nl80211_data *drv = bss->drv;
+	struct nl_msg *msg;
+
+	if (!(msg = nl80211_drv_msg(drv, 0, NL80211_CMD_WL4)) ||
+			nla_put_u32(msg, NL80211_WL4_ATTR_QUOTA, quota) ||
+			nla_put(msg, NL80211_ATTR_MAC, ETH_ALEN, addr)) {
+		nlmsg_free(msg);
+		return -ENOBUFS;
+	}
+
+	return send_and_recv_msgs(drv, msg, NULL, NULL);
+}
+
+static int nl80211_wl4_resume_queues(void *priv, const u8 *addr)
+{
+	struct i802_bss *bss = priv;
+	struct wpa_driver_nl80211_data *drv = bss->drv;
+	struct nl_msg *msg;
+
+	if (!(msg = nl80211_drv_msg(drv, 0, NL80211_CMD_WL4)) ||
+			nla_put(msg, NL80211_ATTR_MAC, ETH_ALEN, addr)) {
+		nlmsg_free(msg);
+		return -ENOBUFS;
+	}
+
+	return send_and_recv_msgs(drv, msg, NULL, NULL);
+}
 
 static int
 nl80211_tdls_enable_channel_switch(void *priv, const u8 *addr, u8 oper_class,
@@ -9508,6 +9555,9 @@ const struct wpa_driver_ops wpa_driver_nl80211_ops = {
 	.send_tdls_mgmt = nl80211_send_tdls_mgmt,
 	.tdls_oper = nl80211_tdls_oper,
 	.tdls_enable_channel_switch = nl80211_tdls_enable_channel_switch,
+	.wl4_change_sleep_time = nl80211_wl4_change_sleep_time,
+	.wl4_change_quota = nl80211_wl4_change_quota,
+	.wl4_resume_queues = nl80211_wl4_resume_queues,
 	.tdls_disable_channel_switch = nl80211_tdls_disable_channel_switch,
 #endif /* CONFIG_TDLS */
 	.update_ft_ies = wpa_driver_nl80211_update_ft_ies,

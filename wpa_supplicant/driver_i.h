@@ -552,6 +552,31 @@ static inline int wpa_drv_send_tdls_mgmt(struct wpa_supplicant *wpa_s,
 	return -1;
 }
 
+static inline int wpa_drv_wl4_change_sleep_time(struct wpa_supplicant *wpa_s,
+		const u32 sleep_time, const u8 *addr)
+{
+	if (wpa_s->driver->wl4_change_sleep_time)
+		return wpa_s->driver->wl4_change_sleep_time(
+				wpa_s->drv_priv, sleep_time, addr);
+	return -1;
+}
+
+static inline int wpa_drv_wl4_change_quota(struct wpa_supplicant *wpa_s,
+		const u32 quota, const u8 *addr)
+{
+	if (wpa_s->driver->wl4_change_quota)
+		return wpa_s->driver->wl4_change_quota(wpa_s->drv_priv, quota, addr);
+	return -1;
+}
+
+static inline int wpa_drv_wl4_resume_queues(struct wpa_supplicant *wpa_s,
+		const u8 *addr)
+{
+	if (wpa_s->driver->wl4_resume_queues)
+		return wpa_s->driver->wl4_resume_queues(wpa_s->drv_priv, addr);
+	return -1;
+}
+
 static inline int wpa_drv_tdls_oper(struct wpa_supplicant *wpa_s,
 				    enum tdls_oper oper, const u8 *peer)
 {
